@@ -1,0 +1,154 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+$progress-bg-color: contrasted($page-bg-color, 12%) !default;
+
+$progress-active-color: contrasted($progress-bg-color, 64%);
+
+@mixin app-progressdial {
+
+    .x-progressdial {
+
+        @include border-radius(50%);
+
+        background-color: transparentize($progress-bg-color, 0.5);
+        position: relative;
+        height: 32px;
+        width: 32px;
+
+        > .x-slice {
+
+            position: absolute;
+            overflow: hidden;
+            height: 100%;
+            width: 50%;
+
+            &.x-right {
+                left: 50%;
+                margin-left: -1px;  //< fix for middle space bug on android
+            }
+
+            &.x-right > div {
+                left: -100%;
+            }
+
+            > div {
+
+                @include transform-origin(right, center);
+
+                // fix transformation jagged edges
+                // \see http://stackoverflow.com/a/7057273 (thanks)
+                @include backface-visibility(hidden);
+
+                position: absolute;
+                height: 100%;
+                width: 100%;
+
+                > div {
+
+                    //! fix clipping on some browser.
+                    //! \see http://stackoverflow.com/questions/5736503/
+
+                    padding: 2px 0 2px 2px;
+                    overflow: hidden;
+                    height: 100%;
+                    width: 100%;
+
+                    &:after {
+
+                        @include border-radius(50%);
+
+                        background-color: $progress-active-color;
+                        content: ' ';
+                        display: block;
+                        height: 100%;
+                        width: 200%;
+                    }
+                }
+            }
+        }
+
+        &.x-interactive {
+
+            > .x-indicator {
+
+                @include transition-duration(.2s);
+                @include transition-property(opacity);
+                @include transition-timing-function(ease-in);
+                @include opacity(0.4);
+
+                display: block;
+                background: none;
+                border-color: transparent;
+                border-style: solid;
+                border-width: 8px;
+                position: absolute;
+                width: 18px;
+                height: 18px;
+
+                &.x-up {
+                    top: -20px;
+                    left: 50%;
+                    margin-left: -9px;
+                    border-bottom-color: inherit;
+                }
+
+                &.x-down {
+                    bottom: -20px;
+                    left: 50%;
+                    margin-left: -9px;
+                    border-top-color: inherit;
+                }
+
+            }
+
+            &.x-pressing > .x-indicator {
+                @include opacity(1);
+            }
+
+            &:after {
+
+                @include border-radius(50%);
+
+                background: rgba(255, 255, 255, 0.5);
+                content: '';
+                display: block;
+                height: 20%;
+                left: 50%;
+                margin-top: -10%;
+                margin-left: -10%;
+                position: absolute;
+                top: 50%;
+                width: 20%;
+
+            }
+        }
+
+        &.x-interactive.x-minimum > .x-indicator.x-up,
+        &.x-interactive.x-maximum > .x-indicator.x-down {
+            @include opacity(0.1);
+        }
+    }
+}

@@ -1,0 +1,85 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ *
+ * JDI **dark** theme SCSS project.
+ */
+
+@import 'stylesheets/dark/functions';
+
+@import 'compass/css3';
+@include font-face('Roboto', font-files('Roboto-Condensed.ttf'), false, normal, normal);
+@include font-face('Roboto', font-files('Roboto-CondensedItalic.ttf'), false, normal, italic);
+@include font-face('Roboto', font-files('Roboto-BoldCondensed.ttf'), false, bold, normal);
+@include font-face('Roboto', font-files('Roboto-BoldCondensedItalic.ttf'), false, bold, italic);
+
+// Overrides
+// @see http://docs.sencha.com/touch/2-1/#!/api/Global_CSS
+$font-family: 'Roboto';
+
+$include-default-icons: false;
+$include-border-radius: false;
+$include-highlights: false;
+$include-default-uis: false;
+
+$base-color: black;
+$active-color: rgb(100, 175, 25);
+$page-bg-color: $base-color;
+$base-gradient: flat;
+$button-radius: 0.3em;
+
+$form-bg-color: transparent;
+$form-dark: contrasted($page-bg-color, 15%);
+$form-light: contrasted($page-bg-color, 75%);
+$sheet-bg-color: contrasted($base-color, 10%);
+
+$list-bg-color: $base-color;
+$list-color: contrasted($base-color, 90%);
+$list-header-bg-color: contrasted($base-color, 80%);
+$list-pressed-color: contrasted($list-bg-color, 25%);
+$list-active-color: contrasted($list-bg-color, 75%);
+
+
+// Sencha Touch
+@import 'sencha-touch/default/all';
+
+@include sencha-panel;
+@include sencha-buttons;
+@include sencha-sheet;
+@include sencha-picker;
+@include sencha-tabs;
+@include sencha-toolbar;
+@include sencha-toolbar-forms;
+@include sencha-indexbar;
+@include sencha-list;
+@include sencha-layout;
+@include sencha-carousel;
+@include sencha-form;
+@include sencha-msgbox;
+
+
+// Custom styles
+@import 'stylesheets/dark/all';
+
+@include app-pictos;
+@include app-animations;
+@include app-widgets;
+@include app-views;

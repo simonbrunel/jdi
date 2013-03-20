@@ -1,0 +1,84 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+$header-bg-color: contrasted($panel-bg-color, 40%) !default;
+
+@mixin app-panel {
+
+    .x-anchor,
+    .x-msgbox,
+    .x-panel.x-floating,
+    .x-panel-light {
+
+        background: $panel-bg-color !important;
+
+        .x-layout-card-item {
+            background: $panel-bg-color;
+        }
+    }
+
+    .x-floating {
+        &.x-panel, &.x-form, &.x-msgbox {
+            .x-panel-inner, > .x-body {
+                background: $panel-bg-color;
+            }
+        }
+    }
+
+    .x-msgbox {
+        .x-msgbox-title.x-docked-top {
+            border-bottom: 1px dotted contrasted($panel-bg-color, 40%);
+            color: contrasted($panel-bg-color, 40%);
+        }
+    }
+
+    .x-panel {
+
+        .panel-header {
+
+            @include single-transition(border-top-color, 0.2s, ease-in-out);
+
+            border-top: 2px solid $header-bg-color;
+
+            .title {
+
+                @include box-shadow(rgba(black, 0.5) 0px 2px 4px);
+                @include single-transition(all, 0.2s, ease-in-out);
+
+                background-color: $header-bg-color;
+                color: contrasted($header-bg-color, 40%);
+                display: block;
+                font-weight: bold;
+                margin: -1px 0 0 0.8em;
+                padding: 0.3em 0.8em;
+                text-transform: uppercase;
+            }
+
+            .x-button {
+                padding: 0.2em;
+            }
+        }
+    }
+}

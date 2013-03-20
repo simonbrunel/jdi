@@ -1,0 +1,48 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@mixin custom-iconmask($name) {
+  .x-tab .x-button-icon.#{$name},
+  .x-button .x-button-icon.x-icon-mask.#{$name} {
+    -webkit-mask-image: inline-image('dark/pictos/' + $name + '.png');
+  }
+}
+
+@mixin app-pictos {
+    @include custom-iconmask('about');
+    @include custom-iconmask('cancel');
+    @include custom-iconmask('cloud');
+    @include custom-iconmask('confirm');
+    @include custom-iconmask('help');
+    @include custom-iconmask('install');
+    @include custom-iconmask('logout');
+    @include custom-iconmask('next');
+    @include custom-iconmask('previous');
+    @include custom-iconmask('session');
+    @include custom-iconmask('start');
+    @include custom-iconmask('task_add');
+    @include custom-iconmask('task_check');
+    @include custom-iconmask('task_delete');
+    @include custom-iconmask('task_edit');
+    @include custom-iconmask('task_update');
+}

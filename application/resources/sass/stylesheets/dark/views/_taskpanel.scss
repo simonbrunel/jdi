@@ -1,0 +1,55 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-view-taskpanel {
+
+    .view-taskpanel {
+
+        @include box-shadow(rgba(0, 0, 0, 0.5) -4px 0 8px);
+
+        color: contrasted($panel-bg-color, 60%);
+        padding: 0 !important;
+
+        .view-taskdetails {
+            margin: 1em;
+        }
+    }
+
+    @include app-panel-header-ui('status-late', $task-group-late-color);
+    @include app-panel-header-ui('status-today', $task-group-today-color);
+    @include app-panel-header-ui('status-tomorrow', $task-group-tomorrow-color);
+    @include app-panel-header-ui('status-soon', $task-group-soon-color);
+    @include app-panel-header-ui('status-someday', $task-group-someday-color);
+    @include app-panel-header-ui('status-completed', $task-group-completed-color);
+}
+
+@mixin app-panel-header-ui($selector, $color, $root: 'x-panel') {
+    .#{$root}.#{$selector} .panel-header {
+        border-top: 2px solid $color;
+        .title {
+            background-color: $color;
+        }
+    }
+}

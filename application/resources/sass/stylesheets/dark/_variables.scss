@@ -1,0 +1,52 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+$panel-bg-color: contrasted($page-bg-color, 12%) !default;
+
+$panel-fg-color: contrasted($panel-bg-color, 40%) !default;
+
+$create-color: rgb(80, 140, 200) !default;
+
+$session-color: rgb(240, 160, 60) !default;
+
+$welcome-color: $active-color !default;
+
+/**
+ * Action colors by type (confirm, decline, etc.)
+ */
+$action-action-color: rgb(50, 125, 175) !default;
+$action-confirm-color: rgb(100, 175, 25) !default;
+$action-decline-color: rgb(175, 0, 0) !default;
+
+/**
+ * Task group colors by date (late, today, etc.)
+ */
+$task-group-late-color: rgb(200, 40, 20) !default;
+$task-group-today-color: rgb(200, 180, 120) !default;
+$task-group-tomorrow-color: rgb(125, 150, 75) !default;
+$task-group-soon-color: rgb(50, 150, 150) !default;
+$task-group-someday-color: rgb(75, 150, 100) !default;
+$task-group-completed-color: rgb(100, 175, 25) !default;
+$task-group-active-color: $session-color !default;
+$task-group-postponed-color: rgb(120, 120, 100) !default;
+$task-group-outoftime-color: $task-group-late-color !default;

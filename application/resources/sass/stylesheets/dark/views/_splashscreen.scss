@@ -1,0 +1,140 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-view-splashscreen {
+
+    .view-splashscreen {
+
+        @include background-image(
+            radial-gradient(
+                center,
+                circle cover,
+                rgba(black, 0) 0,
+                rgba(black, 1) 256px
+            )
+        );
+
+        background-color: rgb(40, 40, 40);
+
+        .logo {
+
+            @include single-transition(all, 0.4s, ease-in-out);
+            @include background-size(contain);
+            @include translateY(100%);
+            @include opacity(0);
+
+            background-image: url(../images/logo.png);
+            background-repeat: no-repeat;
+            height: 2.5em;
+            margin: 1em;
+            width: 5em;
+        }
+
+        .view-authpanel {
+
+            @include single-transition(all, 0.4s, ease-in-out);
+            @include translateY(100%);
+            @include opacity(0);
+
+            width: 12em;
+
+            .x-form {
+
+                @include single-box-shadow(rgba(black, 0.5), 0, 0, 16px);
+                background-color: rgba(0, 0, 0, 0.5);
+
+            }
+
+            .footer {
+                margin-top: 0.6em;
+            }
+        }
+
+        .user-avatar {
+
+            $avatar-size: 96px;
+
+            @include border-radius(3px);
+            @include single-box-shadow(rgba(black, 0.5), 0, 0, 16px);
+
+            background-color: rgba(0, 0, 0, 0.5);
+            height: $avatar-size;
+            width: $avatar-size;
+            margin: auto;
+
+            &:after {
+
+                @include background-image(
+                    radial-gradient(
+                        center,
+                        ellipse cover,
+                        rgba(black, 0) $avatar-size*0.25,
+                        rgba(black, 0.75) $avatar-size*0.75
+                    )
+                );
+
+                content: '';
+                display: block;
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        .user-pseudo {
+            color: contrasted($base-color, 64%);
+            font-size: 1em;
+            font-weight: normal;
+            margin-top: 0.75em;
+            min-height: 1.5em;
+        }
+
+        .user-info {
+            @include single-transition(all, 0.4s, ease-in-out);
+            @include opacity(0);
+        }
+
+        &.state-login {
+            .view-authpanel {
+                @include translateY(0);
+                @include opacity(1);
+            }
+        }
+
+        &.state-login,
+        &.state-logged,
+        &.state-loaded {
+            .logo {
+                @include translateY(0);
+                @include opacity(1);
+            }
+        }
+
+        &.state-loaded {
+            .user-info {
+                @include opacity(1);
+            }
+        }
+    }
+}

@@ -1,0 +1,78 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-toolbar {
+
+    .x-toolbar, .x-actionbar {
+
+        padding: 0;
+
+        .x-horizontal > .x-button { margin-right: 2px; }
+        .x-horizontal > .x-button:last-child { margin-right: 0; }
+        .x-vertical > .x-button { margin-bottom: 2px; }
+        .x-vertical > .x-button:last-child { margin-right: 0; }
+    }
+
+    .x-toolbar {
+
+        border: none;
+
+        .x-button {
+            min-height: 2.6em;
+            min-width: 2.6em;
+        }
+
+    }
+
+    .x-actionbar {
+
+        @include background-image(
+            linear-gradient(
+                top,
+                rgba(black, 0.4) 0%,
+                rgba(black, 0.1) 16%
+            )
+        );
+
+        .x-button {
+
+            min-height: 2.2em;
+            min-width: 2.2em;
+
+            &.x-button-pressed {
+
+                background: transparent;
+
+                .x-button-icon.x-icon-mask {
+                    background: $active-color;
+                }
+            }
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+}

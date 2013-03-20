@@ -1,0 +1,72 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-view-taskdetails {
+
+    .view-taskdetails {
+
+        .task-title {
+            border-bottom: 1px dotted contrasted($panel-bg-color, 16%);
+            padding-bottom: 0.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .task-attributes {
+
+            .x-stopwatch {
+                margin: 0 0 0 0.2em;
+            }
+
+            .task-attribute {
+
+                color: contrasted($panel-bg-color, 32%);
+                font-size: 0.7em;
+                margin-bottom: 0.2em;
+
+                .x-innerhtml {
+
+                    @include display-box();
+
+                    .label {
+
+                        margin-right: 0.2em;
+                        text-transform: capitalize;
+
+                        &:after {
+                            content: ':';
+                        }
+                    }
+                }
+
+                &.late { color: $task-group-late-color; }
+                &.today { color: $task-group-today-color; }
+                &.tomorrow { color: $task-group-tomorrow-color; }
+                &.soon { color: $task-group-soon-color; }
+                &.someday { color: $task-group-someday-color; }
+                &.completed { color: $task-group-completed-color; }
+            }
+        }
+    }
+}

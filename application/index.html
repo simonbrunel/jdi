@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html manifest="" lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>JDI</title>
+    <style type="text/css">
+        html, body {
+            background: black;
+            color: white;
+            height: 100%;
+        }
+
+        @keyframes loading {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        @-webkit-keyframes loading {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        } 
+        
+        #app-loading-indicator {
+            -webkit-animation: loading linear 0.75s infinite;
+            background: url(resources/images/loading.png) center no-repeat;
+            background-size: contain;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -16px;
+            margin-top: -16px;
+            height: 32px;
+            width: 32px;
+        }
+    </style>
+    <script type="text/javascript">
+        var appInfo = { version: '1.1' };
+    </script>
+
+    <!-- The line below must be kept intact for Sencha Command to build your application -->
+    <script id="microloader" type="text/javascript" src="touch/microloader/development.js"></script>
+
+    <script type="text/javascript">
+        var _gaaccount = null;      // replace by the GA account ID (UA-xxxxxxxx-x)
+        if (_gaaccount) {
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', _gaaccount]);
+            _gaq.push(['_setCustomVar', 1, 'Version', appInfo.version]);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        }
+    </script>
+</head>
+<body>
+    <div id="app-loading-indicator"></div>
+</body>
+</html>

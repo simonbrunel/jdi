@@ -1,0 +1,13 @@
+# 3rd party directories
+/application/touch/
+/application/libraries/sencha-io/
+
+# Generated directories
+.jdi-ant-cache/
+.sass-cache/
+.sencha_backup/
+/application/archive
+/application/build
+
+# Generated files
+/application/resources/css/

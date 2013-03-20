@@ -1,0 +1,116 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-list {
+
+    .x-scroll-indicator.default {
+
+        @include border-radius(0);
+
+        background-color: white;
+
+    }
+
+    .x-list {
+
+        &.x-list-grouped {
+
+            .x-list-header-wrap {
+
+                .x-dock-horizontal {
+
+                    padding-top: 2.7em;
+
+                    .x-list-header {
+
+                        background-color: transparent;
+                        border: none;
+                        border-bottom: 1px solid;
+                        color: contrasted($list-bg-color, 32%);
+                        font-size: 2.4em;
+                        font-weight: bold;
+                        height: 1.15em;
+                        overflow: hidden;
+                        padding: 0;
+                        text-transform: uppercase;
+                        z-index: -1;
+
+                        .x-innerhtml {
+                            margin-top: 0.22em;
+                        }
+                    }
+                }
+            }
+        }
+
+        .x-list-item {
+
+            .x-dock-horizontal {
+                border-top: 1px solid contrasted($list-bg-color, 12%);
+            }
+
+            &.x-list-footer-wrap .x-dock-horizontal {
+                border-bottom: none;
+            }
+
+            .x-list-item-body {
+
+                border-left: 8px solid rgb(96, 96, 96);
+
+                font-size: 0.8em;
+                font-weight: normal;
+                min-height: 0;
+                margin: 0;
+                padding: 0;
+
+                > .x-inner {
+                    //border-color: transparent;
+                    //border-style: solid;
+                    //border-width: 1px 0;
+                    min-height: $global-list-height;
+                    padding: 0 0.5em;
+                    margin-left: 1px;
+                }
+            }
+
+            > div {
+                background: none !important;
+            }
+
+            &.x-item-pressed .x-list-item-body > .x-inner {
+                background: transparentize($list-pressed-color, 0.5);
+            }
+
+            &.x-item-selected .x-list-item-body > .x-inner {
+                background: transparentize($list-active-color, 0.25);
+                //border-color: $list-active-color;
+            }
+        }
+
+        &.x-list-emptytext {
+            color: rgb(150, 150, 150);
+        }
+    }
+}

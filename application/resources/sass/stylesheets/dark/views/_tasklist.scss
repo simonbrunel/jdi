@@ -1,0 +1,138 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-view-tasklist {
+
+    .view-tasklist {
+
+        $panel-indicator-size: 32px;
+
+        border-top: 1px solid contrasted($base-color, 16%);
+
+        .x-list-header {
+
+            &.group-late { color: $task-group-late-color !important; }
+            &.group-today { color: $task-group-today-color !important; }
+            &.group-soon { color: $task-group-soon-color !important; }
+            &.group-someday { color: $task-group-someday-color !important; }
+
+        }
+
+        .x-list-item-body {
+
+            .task-duration {
+                margin-right: 0.5em;
+            }
+
+            .task-title {
+                margin-left: 2px;
+
+                .x-innerhtml {
+                    @include ellipsis();
+                }
+            }
+
+            .task-due {
+
+                @include opacity(0.4);
+
+                border: 1px solid;
+                display: inline-block;
+                font-size: 0.8em;
+                padding: 1px 8px;
+                text-transform: lowercase;
+
+                .x-innerhtml {
+                    @include ellipsis();
+                }
+            }
+
+            &.task-late { border-color: $task-group-late-color; }
+            &.task-today { border-color: $task-group-today-color; }
+            &.task-soon { border-color: $task-group-soon-color; }
+            &.task-someday { border-color: $task-group-someday-color; }
+
+            &.task-completed {
+
+                $inactive-color: contrasted($list-bg-color, 24%);
+
+                border-color: $inactive-color;
+                color: $inactive-color;
+
+                .x-progressdial > .x-slice > div > div:after {
+                    background-color: $inactive-color;
+                }
+
+                .task-title {
+                    text-decoration: line-through;
+                }
+            }
+        }
+
+        // simulates the task panel to task item arrow
+        .x-item-selected .x-list-item-inner {
+
+            position: relative;
+
+            &:after {
+                content: '';
+                display: none;
+                position: absolute;
+                top: 50%;
+                width: $panel-indicator-size;
+                height: $panel-indicator-size;
+                margin-top: -($panel-indicator-size/2);
+                margin-left: -($panel-indicator-size - 1);
+                background: none !important;
+                border-color: transparent;
+                border-right-color: $panel-bg-color;
+                border-style: solid;
+                border-width: $panel-indicator-size/2;
+            }
+        }
+    }
+
+    .x-profile-phone {
+
+        .view-tasklist.taskpanel-visible .x-item-selected .x-list-item-inner {
+
+            &:after {
+                display: block;
+                left: 25%;
+            }
+        }
+    }
+
+    .x-profile-tablet {
+
+        .view-tasklist .x-item-selected .x-list-item-inner {
+
+            &:after {
+                display: block;
+                left: 100%;
+            }
+        }
+    }
+}

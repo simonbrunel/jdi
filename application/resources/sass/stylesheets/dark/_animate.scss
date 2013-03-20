@@ -1,0 +1,45 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ *
+ * - **Note**: based on the work of theCSSguru
+ * - **See**: http://thecssguru.freeiz.com/animate/
+ * - **See**: http://thecssguru.freeiz.com/animate/src/partials/_animate.sass
+ */
+
+@mixin animate($name: fadeIn, $duration: 1s, $delay: .2s, $function: ease, $mode: both) {
+    @include experimental(animation, $name $duration $delay $function $mode)
+}
+
+@mixin app-animations {
+
+    // Rotate (360deg)
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @-webkit-keyframes rotate {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+}

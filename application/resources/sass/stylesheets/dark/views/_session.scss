@@ -1,0 +1,107 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-view-session {
+
+    .x-button, .x-toolbar .x-button {
+
+        &.x-button-pressed.session {
+
+            background-color: $session-color;
+
+        }
+    }
+    .view-tasklist .x-list-header {
+
+        &.group-active { color: $task-group-active-color !important; }
+        &.group-postponed { color: $task-group-postponed-color !important; }
+        &.group-done { color: $task-group-completed-color !important; }
+        &.group-out_of_time { color: $task-group-outoftime-color !important; }
+
+    }
+ 
+    .view-session {
+
+        .x-profile-phone .x-vertical > & {  min-height: 8em; }
+        .x-profile-phone .x-horizontal > & {  width: 10em; }
+        .x-profile-tablet & {  min-height: 8em; }
+
+        &.x-panel .panel-header {
+
+            border-top: 2px solid $session-color;
+
+            .title {
+                background-color: $session-color;
+            }
+        }
+
+        .x-stopwatch {
+
+            font-size: 1.2em;
+            width: 5.4em;
+
+            .x-progressdial {
+
+                background: contrasted($page-bg-color, 16%);
+                height: 64px;
+                width: 64px;
+
+                > .x-slice > div > div:after {
+                    background: none;
+                    border: 16px solid;
+                }
+            }
+        }
+
+        .tasks-active,
+        .tasks-done {
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 0.4em;
+        }
+
+        .tasks-active {
+            .x-innerhtml:before {
+
+                @include opacity(0.5);
+
+                content: 'Active: ';
+                font-weight: normal;
+            }
+        }
+
+        .tasks-done {
+
+            background: $task-group-completed-color;
+            color: contrasted($task-group-completed-color, 75%);
+            padding: 0.4em 0.8em;
+
+            .x-innerhtml:before {
+                content: 'Done: ';
+                font-weight: bold;
+            }
+        }
+    }
+}

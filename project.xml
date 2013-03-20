@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="jdi" basedir=".">
+
+    <!-- Specify the application base path -->
+    <property name="app.dir" value="application"/>
+
+    <property name="cache.dir" location=".jdi-ant-cache"/>
+
+    <property name="touch.version" value="2.1.1"/>
+
+    <property name="touch.src" value="http://cdn.sencha.io/touch/sencha-touch-${touch.version}-gpl.zip"/>
+
+    <property name="io.version" value="0.7.13"/>
+
+    <property name="io.src" value="http://download.sencha.io/sencha-io-${io.version}.zip"/>
+
+    <target name="initialize">
+
+        <mkdir dir="${cache.dir}"/>
+
+        <!-- Download and unpack 3rd parties -->
+        <get dest="${cache.dir}" verbose="true" skipexisting="true">
+            <url url="${touch.src}" />
+            <url url="${io.src}" />
+        </get>
+
+        <unzip dest="${cache.dir}">
+            <fileset dir="${cache.dir}">
+                <include name="*.zip"/>
+            </fileset>
+        </unzip>
+
+        <!-- Deploy Sencha Touch -->
+        <copy todir="${app.dir}/touch" includeEmptyDirs="false">
+            <fileset dir="${cache.dir}/touch-${touch.version}">
+                <exclude name="docs/**/*" />
+                <exclude name="examples/**/*"/>
+            </fileset>
+        </copy>
+
+        <!-- Deploy Sencha IO -->
+        <copy todir="${app.dir}/libraries/sencha-io" includeEmptyDirs="false">
+            <fileset dir="${cache.dir}/sencha-io-${io.version}">
+                <exclude name="architect/**/*" />
+                <exclude name="examples/**/*"/>
+            </fileset>
+        </copy>
+
+        <!--delete dir="${cache.dir}"/-->
+    </target>
+</project>

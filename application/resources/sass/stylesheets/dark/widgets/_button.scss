@@ -1,0 +1,152 @@
+/*
+ * This file is part of JDI.
+ * Copyright (c) 2013 Simon Brunel.
+ * Contact: http://www.github.com/simonbrunel
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @author Simon Brunel
+ */
+
+@import '../global';
+
+@mixin app-button {
+
+    .x-button, .x-toolbar .x-button {
+
+        @include single-transition(all, 0.4s, ease);
+
+        background-color: transparent;
+        color: white;
+        border: none;
+        padding: .2em .4em;
+        margin: 0;
+
+        .x-button-label {
+            font-weight: normal;
+        }
+
+        .x-button-icon.x-icon-mask {
+            -webkit-mask-size: 24px;
+            -webkit-mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            width: 24px;
+            height: 24px;
+        }
+
+        &.x-button-pressed {
+
+            background: rgb(128, 128, 128);
+            color: black;
+
+            .x-button-icon.x-icon-mask {
+                background: rgb(32, 32, 32);
+            }
+        }
+    }
+
+    // button ui
+    @include app-button-ui(normal, transparent, auto);
+    @include app-button-ui(action, $action-action-color, auto);
+    @include app-button-ui(confirm, $action-confirm-color, auto);
+    @include app-button-ui(decline, $action-decline-color, auto);
+    @include app-button-ui(defused, contrasted($page-bg-color, 24%), auto);
+}
+
+/**
+ * Creates a theme UI for buttons, including standard and link style.
+ */
+@mixin app-button-ui($ui-label, $background, $foreground) {
+
+    // resolving the 'auto' foreground
+    @if $foreground == auto {
+        @if $background != transparent {
+            $foreground: contrasted($background, 100%);
+        } @else {
+            $foreground: contrasted($base-color, 100%);
+        }
+    }
+
+    $fg-link: $background;
+    @if $fg-link == transparent {
+        $fg-link: contrasted($foreground, 75%);
+    }
+
+    @include app-button-base-ui($ui-label, $background, $foreground);
+    @include app-button-link-ui($ui-label, $fg-link);
+}
+
+/**
+ * Creates a theme UI for standard buttons.
+ */
+@mixin app-button-base-ui($ui-label, $background, $foreground) {
+    .x-button.x-button-#{$ui-label} {
+
+        background: $background;
+        color: $foreground;
+
+        .x-button-icon.x-icon-mask {
+            background: $foreground;
+        }
+
+        &.x-item-disabled {
+
+            $disabled-color: transparentize(contrasted($page-bg-color, 50%), 0.5);
+
+            background: none;
+            color: $disabled-color;
+
+            .x-button-icon.x-icon-mask {
+                background: $disabled-color;
+            }
+        }
+
+        &.x-button-pressing {
+            @if $background != transparent {
+                background: contrasted($background, -24%);
+            } @else {
+                background: contrasted($foreground, 50%);
+            }
+
+            color: contrasted($foreground, -24%);
+        }
+    }
+}
+
+/**
+ * Creates a theme UI for link buttons.
+ */
+@mixin app-button-link-ui($ui-label, $foreground) {
+    .x-button.x-button-#{$ui-label}-link {
+
+        background: transparent;
+        color: $foreground;
+        text-decoration: underline;
+
+        .x-button-label {
+            font-size: 0.8em;
+        }
+
+        .x-button-icon.x-icon-mask {
+            background: $foreground;
+        }
+
+        &.x-button-pressing {
+            background: transparent;
+            color: contrasted($foreground, -24%);
+        }
+    }
+}
