@@ -54,6 +54,8 @@ Ext.define('App.view.TaskList', {
          * @cfg scrollable
          * Direction lock to 'mark as done' tasks on horizontal swipe.
          */
-        scrollable: { direction: 'vertical', directionLock: true }
+        scrollable: { direction: 'vertical', directionLock: true },
+
+        infinite: true
     }
 });

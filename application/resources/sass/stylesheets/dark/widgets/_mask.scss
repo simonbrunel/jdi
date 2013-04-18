@@ -51,6 +51,9 @@
             height: 32px;
             width: 32px;
 
+            font-size: 0;
+            -webkit-transform-origin: center;
+            transform-origin: center;
         }
 
         .x-mask-inner {

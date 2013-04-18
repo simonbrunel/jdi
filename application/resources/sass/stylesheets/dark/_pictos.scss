@@ -23,8 +23,14 @@
 
 @mixin custom-iconmask($name) {
   .x-tab .x-button-icon.#{$name},
-  .x-button .x-button-icon.x-icon-mask.#{$name} {
+  .x-button .x-button-icon.#{$name} {
     -webkit-mask-image: inline-image('dark/pictos/' + $name + '.png');
+    -webkit-mask-size: 24px;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    background: #fff;
   }
 }
 

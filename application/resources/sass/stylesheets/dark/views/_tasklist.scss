@@ -94,8 +94,6 @@
         // simulates the task panel to task item arrow
         .x-item-selected .x-list-item-inner {
 
-            position: relative;
-
             &:after {
                 content: '';
                 display: none;

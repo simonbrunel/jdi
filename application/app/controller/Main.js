@@ -21,7 +21,7 @@
  * @class App.controller.Main
  * @author Simon Brunel
  *
- * Controls application global execution, including Sencha.io initialization, 
+ * Controls application global execution, including Sencha.io initialization,
  * user login, registeration and logout, splashscreen display, etc. Note
  * that the *Main* view is handled in profiles.
  *

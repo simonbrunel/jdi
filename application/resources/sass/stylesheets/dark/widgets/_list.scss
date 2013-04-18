@@ -35,33 +35,23 @@
 
     .x-list {
 
-        &.x-list-grouped {
+        .x-list-header {
 
-            .x-list-header-wrap {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid;
+            color: contrasted($list-bg-color, 32%);
+            font-size: 2.4em;
+            font-weight: bold;
+            height: 1.15em;
+            overflow: hidden;
+            padding: 0;
+            text-transform: uppercase;
+            z-index: -1;
+            display: block;
 
-                .x-dock-horizontal {
-
-                    padding-top: 2.7em;
-
-                    .x-list-header {
-
-                        background-color: transparent;
-                        border: none;
-                        border-bottom: 1px solid;
-                        color: contrasted($list-bg-color, 32%);
-                        font-size: 2.4em;
-                        font-weight: bold;
-                        height: 1.15em;
-                        overflow: hidden;
-                        padding: 0;
-                        text-transform: uppercase;
-                        z-index: -1;
-
-                        .x-innerhtml {
-                            margin-top: 0.22em;
-                        }
-                    }
-                }
+            .x-innerhtml {
+                margin-top: 0.22em;
             }
         }
 

@@ -1,3 +1,26 @@
+Forked from http://github.com/simonbrunel/jdi, and upgraded to Sencha Touch 2.2.0
+
+You can check it on [JDI with Touch 2.2.0](http://kawanoshinobu.github.io/jdi/)
+
+NOTE: In Touch 2.2.0, $font-family variables doesn't work. (I posted [bug report](http://www.sencha.com/forum/showthread.php?261710-font-family-variables-doesn-t-work-since-Touch-2.2) to Sencha.)
+
+So, you must change code as following until fixed this.
+
+application/touch/resources/themes/stylesheets/sencha-touch/base/src/_Class.scss
+
+    html, body {
+    -   font-family: "Helvetica Neue", HelveticaNeue, "Helvetica-Neue", Helvetica, "BBAlpha Sans", sans-serif;
+    +   font-family: $font-family;
+        font-weight: normal;
+        -webkit-text-size-adjust: none;
+        margin: 0;
+        cursor: default;
+    }
+
+After, you can compile dark.scss correctly.
+
+---
+
 # JDI
 
 Have spare time and so many tasks to get done, but don't know where to start? Just grab your mobile, tablet or laptop and start a **JDI session**! Available on Android and iOS, JDI is a fully functionnal To Do app which offers a new way to prioritize tasks. The user simply selects the available time and the app picks the tasks that should be done right now. JDI give you the force to get your tasks done, *just do it* now!
@@ -14,7 +37,7 @@ JDI is **free** and a **demo** is available at the following address: <http://jd
 
 The latest version of JDI (1.1) uses the following technologies:
 
-- [Sencha Touch 2.1.1](http://www.sencha.com/products/touch/)
+- [Sencha Touch 2.2](http://www.sencha.com/products/touch/)
 - [Sencha.io 0.7.13](http://www.sencha.com/products/io/)
 - [Gravatar APIs](https://en.gravatar.com/site/implement/)
 

@@ -39,7 +39,7 @@ Ext.define('App.view.TaskListHeader', {
 
         html: ' ',
 
-        hidden: true
+        hidden: false
     },
 
     _extraCls: [],

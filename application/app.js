@@ -52,15 +52,37 @@ Ext.application({
         'Ext.MessageBox'
     ],
 
+    models:[
+        'Task'
+    ],
+
+    views: [
+        'AuthPanel',
+        'Discover',
+        'Session',
+        'SplashScreen',
+        'TaskCreate',
+        'TaskDetails',
+        'TaskForm',
+        'TaskList',
+        'TaskListItem',
+        'TaskPanel',
+        'ToolBar',
+        'UserPanel',
+        'WelcomeScreen',
+        'phone.Main',
+        'tablet.Main'
+    ],
+
+    stores: [
+        'Tasks'
+    ],
+
     io: {   // Sencha IO config
         appId: '9d9d3676-6c67-45dd-80fc-4a4b71fa7cb1',
         authOnStartup: true,
         manualLogin: true
     },
-
-    models: [
-        'Task'
-    ],
 
     profiles: [
         'Phone',

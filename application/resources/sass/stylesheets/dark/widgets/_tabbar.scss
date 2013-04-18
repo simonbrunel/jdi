@@ -26,6 +26,7 @@
 @mixin app-tabbar {
 
     .x-tabbar {
+        background-color: transparent;
 
         .x-tab {
 
@@ -56,5 +57,9 @@
                 }
             }
         }
+    }
+
+    .x-tabbar.x-docked-top .x-tab .x-button-label {
+        height: 1.2em;
     }
 }
