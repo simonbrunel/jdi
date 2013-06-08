@@ -41,14 +41,15 @@
             border: none;
             border-bottom: 1px solid;
             color: contrasted($list-bg-color, 32%);
+            display: block;
             font-size: 2.4em;
             font-weight: bold;
             height: 1.15em;
+            margin-top: 1px;
             overflow: hidden;
             padding: 0;
             text-transform: uppercase;
             z-index: -1;
-            display: block;
 
             .x-innerhtml {
                 margin-top: 0.22em;
@@ -58,7 +59,7 @@
         .x-list-item {
 
             .x-dock-horizontal {
-                border-top: 1px solid contrasted($list-bg-color, 12%);
+                border-top: 1px solid contrasted($list-bg-color, 12%) !important;
             }
 
             &.x-list-footer-wrap .x-dock-horizontal {
@@ -71,16 +72,12 @@
 
                 font-size: 0.8em;
                 font-weight: normal;
-                min-height: 0;
                 margin: 0;
                 padding: 0;
 
                 > .x-inner {
-                    //border-color: transparent;
-                    //border-style: solid;
-                    //border-width: 1px 0;
                     min-height: $global-list-height;
-                    padding: 0 0.5em;
+                    padding: 0 0.4em;
                     margin-left: 1px;
                 }
             }
@@ -95,7 +92,6 @@
 
             &.x-item-selected .x-list-item-body > .x-inner {
                 background: transparentize($list-active-color, 0.25);
-                //border-color: $list-active-color;
             }
         }
 

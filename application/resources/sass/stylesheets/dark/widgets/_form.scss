@@ -60,7 +60,15 @@
         }
     }
 
-    .x-form .x-scroll-container>.x-inner {
-        padding: 1em;
+    .x-form {
+
+        .x-scroll-container > .x-inner {
+            padding: 1em;
+        }
+
+        // Fixed Touch 2.2.1 added submit input (visibility: hidden)
+        > input[type="submit"] {
+           display: none;
+        }
     }
 }

@@ -41,22 +41,19 @@
 
             .task-attribute {
 
+                @include display-box();
+
                 color: contrasted($panel-bg-color, 32%);
                 font-size: 0.7em;
                 margin-bottom: 0.2em;
 
-                .x-innerhtml {
+                .label {
 
-                    @include display-box();
+                    margin-right: 0.2em;
+                    text-transform: capitalize;
 
-                    .label {
-
-                        margin-right: 0.2em;
-                        text-transform: capitalize;
-
-                        &:after {
-                            content: ':';
-                        }
+                    &:after {
+                        content: ':';
                     }
                 }
 

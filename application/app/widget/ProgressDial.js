@@ -64,7 +64,6 @@ Ext.define('App.widget.ProgressDial', {
     template: [
         {
             cls: 'x-slice x-left',
-            //reference: 'lslice',
             children: [
                 {   // left slice mask
                     reference: 'lslice',
@@ -74,7 +73,6 @@ Ext.define('App.widget.ProgressDial', {
         },
         {
             cls: 'x-slice x-right',
-            //reference: 'rslice',
             children: [
                 {   // right slice mask
                     reference: 'rslice',
@@ -91,7 +89,11 @@ Ext.define('App.widget.ProgressDial', {
     _dragStartValue: null,
 
     applyValue: function(value) {
-        return App.util.Math.bound(this.getMinimum(), value, this.getMaximum());
+        return App.util.Math.bound(
+            this.getMinimum(),
+            Math.ceil(value),
+            this.getMaximum()
+        );
     },
 
     updateValue: function(value) {
@@ -108,32 +110,30 @@ Ext.define('App.widget.ProgressDial', {
     },
 
     updateInteractive: function(interactive) {
-        if (!this._listeners) {
-            this._listeners = {
-                touchstart: '_onTouchStart',
-                touchend: '_onTouchEnd',
-                dragstart: '_onDragStart',
-                drag: '_onDrag',
-                dragend: '_onDragEnd',
+        var listeners = this._listeners;
+        if (!listeners) {
+            listeners = this._listeners = {
+                touchstart: this._onTouchStart,
+                touchend: this._onTouchEnd,
+                dragstart: this._onDragStart,
+                drag: this._onDrag,
                 scope: this
             }
         }
 
         if (interactive) {
-            this.element.on(this._listeners);
+            this.element.on(listeners);
             this.addCls('x-interactive');
         } else {
-            this.element.un(this._listeners);
+            this.element.un(listeners);
             this.removeCls('x-interactive');
         }
     },
 
     currentPercent: function() {
-        var value = this.getValue(),
-            min = this.getMinimum(),
-            max = this.getMaximum(),
-            diff = max - min;
-        return diff > 0 ? (value - min) / diff : 0;
+        var min = this.getMinimum(),
+            diff = this.getMaximum() - min;
+        return diff > 0 ? (this.getValue() - min) / diff : 0;
     },
 
     /**
@@ -145,10 +145,15 @@ Ext.define('App.widget.ProgressDial', {
             rangle = App.util.Math.bound(0, angle, 180),
             langle = App.util.Math.bound(180, angle, 360);
 
-        this.rslice.setStyle('-webkit-transform', 'rotate(' + rangle + 'deg)');
-        this.lslice.setStyle('-webkit-transform', 'rotate(' + langle + 'deg)');
-        this.rslice.setStyle('visibility', (angle > 0? 'visible' : 'hidden'));
-        this.lslice.setStyle('visibility', (angle > 180? 'visible' : 'hidden'));
+        this.rslice.setStyle({
+            '-webkit-transform': 'rotate(' + rangle + 'deg)',
+            'visibility': (angle > 0? 'visible' : 'hidden')
+        });
+
+        this.lslice.setStyle({
+            '-webkit-transform': 'rotate(' + langle + 'deg)',
+            'visibility': (angle > 180? 'visible' : 'hidden')
+        });
 
         this.toggleCls('x-minimum', value == this.getMinimum());
         this.toggleCls('x-maximum', value == this.getMaximum());
@@ -180,6 +185,11 @@ Ext.define('App.widget.ProgressDial', {
      * @private
      */
     _onDrag: function(e) {
-        this.setValue(this._dragStartValue + e.deltaY * 16);
+        var start = this._dragStartValue,
+            delta = e.deltaY / 256,
+            min = this.getMinimum(),
+            max = this.getMaximum();
+
+        this.setValue(start + delta * Math.abs(max - min));
     }
 });

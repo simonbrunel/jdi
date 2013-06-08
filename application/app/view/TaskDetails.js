@@ -46,11 +46,20 @@ Ext.define('App.view.TaskDetails', {
             },
             {
                 cls: 'task-attributes',
-                layout: 'hbox',
+                layout: { type: 'hbox', align: 'top' },
                 items: [
                     {   // attributes
+                        xtype: 'component',
                         itemId: 'task-attributes',
-                        flex: 1
+                        flex: 1,
+                        tpl: [
+                            '<tpl for="attributes">',
+                                '<div class="task-attribute {cls}">',
+                                    '<div class="label">{label}</div>',
+                                    '<div class="value">{value}</div>',
+                                '</div>',
+                            '</tpl>'
+                        ]
                     },
                     {   // duration
                         xtype: 'stopwatch',
@@ -106,7 +115,7 @@ Ext.define('App.view.TaskDetails', {
         var refs = this._ensureRefs(),
             duration = data ? data.duration || 0 : 0;
         refs.stopwatch.setHidden(duration <= 0);
-        refs.stopwatch.setTime(duration);
+        refs.stopwatch.setTime(duration/60);
     },
 
     /**
@@ -149,16 +158,6 @@ Ext.define('App.view.TaskDetails', {
             });
         }
 
-        Ext.each(attributes, function(attribute) {
-            items.push({
-                cls: ['task-attribute', attribute.cls || ''],
-                data: attribute,
-                tpl: '<div class="label">{label}</div>'
-                    +'<div class="value">{value}</div>'
-            });
-        });
-
-        refs.attributes.setHidden(Ext.isEmpty(items));
-        refs.attributes.setItems(items);
+        refs.attributes.setData({ attributes: attributes });
     }
 });

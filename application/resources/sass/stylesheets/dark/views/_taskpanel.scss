@@ -35,10 +35,6 @@
         .view-taskdetails {
             margin: 1em;
         }
-
-        .x-button .x-button-icon.task_update {
-            background: rgb(32, 32, 32);
-        }
     }
 
     @include app-panel-header-ui('status-late', $task-group-late-color);

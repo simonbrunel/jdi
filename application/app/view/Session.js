@@ -31,13 +31,6 @@ Ext.define('App.view.Session', {
     config: {
 
         /**
-         * @cfg {String} orientation
-         * The session remaining time
-         * @accessor
-         */
-        time: null,
-
-        /**
          * @cfg {String} state
          * Current session state ('setup' or 'running')
          * @accessor
@@ -104,14 +97,14 @@ Ext.define('App.view.Session', {
                         flex: 1,
                         items: [
                             {   // active statistics
-                                xtype: 'label',
+                                xtype: 'component',
                                 itemId: 'stats-active',
                                 cls: ['statistics', 'tasks-active'],
                                 tpl: '{active}/{total}',
                                 data: { active: 0, total: 0 }
                             },
                             {   // done statistics
-                                xtype: 'label',
+                                xtype: 'component',
                                 itemId: 'stats-done',
                                 cls: ['statistics', 'tasks-done'],
                                 tpl: '{done}',
@@ -147,7 +140,12 @@ Ext.define('App.view.Session', {
      */
     _refs: null,
 
-    updateTime: function(time) {
+    getTime: function() {
+        var refs = this._ensureRefs();
+        return refs.stopwatch.getTime();
+    },
+
+    setTime: function(time) {
         var refs = this._ensureRefs();
         refs.stopwatch.setTime(time);
     },
@@ -176,14 +174,27 @@ Ext.define('App.view.Session', {
         return statistics;
     },
 
-    updateStatistics: function(statistics) {
+    updateStatistics: function(current, previous) {
         var refs = this._ensureRefs(),
-            state = this.getState();
+            state = this.getState(),
+            changed = true;
 
-        refs.statsdone.setData(statistics);
-        refs.statsactive.setData(statistics);
-        if (state == 'setup') {
-            refs.buttonstart.setDisabled(statistics.active == 0);
+        if (current && previous) {
+            changed = false;
+            Ext.Object.each(current, function(key, value) {
+                if (value !== previous[key]) {
+                    changed = true;
+                    return false;
+                }
+            });
+        }
+
+        if (changed) {
+            refs.statsdone.setData(current);
+            refs.statsactive.setData(current);
+            if (state == 'setup') {
+                refs.buttonstart.setDisabled(current.active == 0);
+            }
         }
     },
 

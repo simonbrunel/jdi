@@ -38,7 +38,7 @@ Ext.define('App.widget.Stopwatch', {
 
         /**
          * @cfg {Number} duration
-         * Stopwatch duration (in seconds)
+         * Stopwatch duration (in minutes)
          * @accessor
          */
         time: 0,
@@ -63,73 +63,103 @@ Ext.define('App.widget.Stopwatch', {
         layout: { type: 'hbox', align: 'center' },
 
         items: [
-            {
-                xtype: 'progressdial',
+            {   xtype: 'progressdial',
                 itemId: 'progress',
                 minimum: 0,
-                maximum: 3600,
+                maximum: 60,
                 interactive: false
             },
-            {
-                xtype: 'label',
+            {   xtype: 'component',
                 itemId: 'label',
-                flex: 1
+                cls: 'x-label',
+                flex: 1,
+                tpl: [
+                    '<tpl if="empty">',
+                        '<div class="x-emptytext">{text}</div>',
+                    '<tpl else>',
+                        '<div class="x-value">{time}</div>',
+                        '<div class="x-suffix">min</div>',
+                    '</tpl>'
+                ]
             }
         ]
     },
+
+    /**
+     * @private
+     * Internal component references (optimizations)
+     * See _ensureRefs for available references.
+     */
+    _refs: null,
 
     cachedConfig: {
         baseCls: Ext.baseCSSPrefix + 'stopwatch'
     },
 
     applyTime: function(time) {
-        return App.util.Math.bound(0, time, 3599);
+        return App.util.Math.bound(0, Math.ceil(time), 60);
     },
 
     updateTime: function(time) {
-        this.child('#progress').setValue(time);
-        this._updateLabel();
+        var refs = this._ensureRefs();
+        refs.progress.setValue(time);
+        this._updateLabel(refs.label);
         this.fireEvent('timechange', time);
     },
 
     updateInteractive: function(interactive) {
-        var progress = this.child('#progress');
+        var refs = this._ensureRefs(),
+            progress = refs.progress,
+            listeners = {
+                valuechanged: this._onProgressValueChanged,
+                scope: this
+            };
+
         progress.setInteractive(interactive);
         if (interactive) {
-            progress.on('valuechanged', '_onProgressValueChanged', this);
+            progress.on(listeners);
         } else {
-            progress.un('valuechanged', '_onProgressValueChanged', this);
+            progress.un(listeners);
         }
 
-        this._updateLabel();
+        this._updateLabel(refs.label);
     },
 
     updateEmptyText: function() {
-        this._updateLabel();
+        var refs = this._ensureRefs();
+        this._updateLabel(refs.label);
     },
 
     updateLabelHidden: function(hidden) {
-        this.child('#label').setHidden(hidden);
+        var refs = this._ensureRefs();
+        refs.label.setHidden(hidden);
     },
 
     /**
      * @private
      */
-    _updateLabel: function() {
-        var text = this.getEmptyText(),
-            label = this.child('#label'),
-            time = this.getTime();
-        if (text && time == 0) {
-            label.addCls('x-emptytext');
-            label.setHtml(text);
-        } else {
-            var value = Math.ceil(time/60); // minutes
-            label.removeCls('x-emptytext');
-            label.setHtml(
-                '<div class="x-value">' + value + '</div>'+
-                '<div class="x-suffix">min</div>'
-            );
+    _ensureRefs: function() {
+        if (this._refs == null) {
+            this._refs = {
+                progress: this.child('#progress'),
+                label: this.child('#label')
+            };
         }
+
+        return this._refs;
+    },
+
+    /**
+     * @private
+     */
+    _updateLabel: function(component) {
+        var text = this.getEmptyText(),
+            time = this.getTime();
+        component.setData({
+            empty: (text && time == 0),
+            time: time,
+            text: text
+        });
     },
 
     /**

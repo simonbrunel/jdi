@@ -44,8 +44,6 @@ Ext.define('App.view.TaskList', {
 
         pinHeaders: false,
 
-        variableHeights: false,
-
         refreshHeightOnUpdate: false,
 
         scrollToTopOnRefresh: false,

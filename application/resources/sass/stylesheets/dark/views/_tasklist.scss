@@ -46,27 +46,19 @@
                 margin-right: 0.5em;
             }
 
-            .task-title {
-                margin-left: 2px;
-
-                .x-innerhtml {
-                    @include ellipsis();
-                }
+            .task-title .x-innerhtml,
+            .task-due .x-innerhtml {
+                @include ellipsis();
             }
 
             .task-due {
 
-                @include opacity(0.4);
-
                 border: 1px solid;
+                color: contrasted($list-bg-color, 32%);
                 display: inline-block;
                 font-size: 0.8em;
                 padding: 1px 8px;
                 text-transform: lowercase;
-
-                .x-innerhtml {
-                    @include ellipsis();
-                }
             }
 
             &.task-late { border-color: $task-group-late-color; }
@@ -79,7 +71,7 @@
                 $inactive-color: contrasted($list-bg-color, 24%);
 
                 border-color: $inactive-color;
-                color: $inactive-color;
+                color: $inactive-color !important;
 
                 .x-progressdial > .x-slice > div > div:after {
                     background-color: $inactive-color;
@@ -87,6 +79,10 @@
 
                 .task-title {
                     text-decoration: line-through;
+                }
+
+                .task-due {
+                    color: contrasted($list-bg-color, 16%);
                 }
             }
         }

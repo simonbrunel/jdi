@@ -171,7 +171,7 @@ Ext.define('App.util.Strings', {
 
         'about_details':
             'JDI uses the following technologies: ' +
-            '<ul><li> Sencha Touch 2.2' +
+            '<ul><li> Sencha Touch 2.2.1' +
             '<li> Sencha.io 0.7.13' +
             '<li> Gravatar APIs' +
             '</ul>',

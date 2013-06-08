@@ -53,16 +53,6 @@ Ext.define('App.controller.Session', {
         }
     },
 
-    statics: {
-
-        _fields: {
-            expired: '_session_expired',
-            excluded: '_session_excluded',
-            postponed: '_session_postponed'
-        }
-
-    },
-
     _store: null,
 
     _timer: null,           // created during the controller initialization.
@@ -95,12 +85,13 @@ Ext.define('App.controller.Session', {
         });
 
         this._timer = Ext.create("App.util.Timer", {
+            tickInterval: 60000,
             duration: 0,
-            tickInterval: 1000,
             listeners: {
+                timeout: this._onTimeout,
+                tick: this._onTick,
                 scope: this,
-                tick: '_onTick',
-                timeout: '_onTimeout' }
+            }
         });
     },
 
@@ -134,22 +125,23 @@ Ext.define('App.controller.Session', {
 
     /**
      * @private
-     * Start a new session of the given *duration*
+     * Start a new session of the given *minutes*.
      */
-    _start: function(duration) {
+    _start: function(minutes) {
         var view = this.getSessionView(),
             list = this.getTaskList(),
-            store = list.getStore();
+            store = list.getStore(),
+            seconds = minutes * 60;
 
         view.setState('running');
-        view.setTime(duration);
+        view.setTime(minutes);
 
-        this._duration = duration;
-        this._remaining = duration;
+        this._duration = seconds;
+        this._remaining = seconds;
         this._resetRecords(store);
         this._polishStore(store);         // after reset to avoid notificaitons
         this._resetStatistics(store);
-        this._timer.start(duration * 1000);
+        this._timer.start(seconds * 1000);
         this._isRunning = true;
 
         list.onBefore('itemswipe', '_onItemSwipe', this);
@@ -193,7 +185,7 @@ Ext.define('App.controller.Session', {
                             me._restart();
                         } else {
                             me._suspend();
-                            me.getSessionView().close();
+                            me.getSessionView().hide();
                         }
                     }
                 });
@@ -205,16 +197,14 @@ Ext.define('App.controller.Session', {
      * @private
      */
     _polishStore: function(store) {
-
         this._store = store;
         this._oldStoreGrouper = store.getGrouper();
+
+        store.suspendEvents();
         store.filter(this._storeFilter);
         store.setGrouper(this._storeGrouper);
-
-        // we need to manually sort the store to apply the new grouper.
-        //! @TODO report this behaviour as a bug to sencha ?!
-        store.sort();
-
+        store.resumeEvents(true);
+        store.fireEvent('refresh', store, store.data);
         store.on({
             scope: this,
             updaterecord: this._onRecordUpdated,
@@ -236,13 +226,15 @@ Ext.define('App.controller.Session', {
             removerecords: this._onRecordRemoved
         });
 
+        store.suspendEvents();
         store.setGrouper(this._oldStoreGrouper);
         store.getData().removeFilters(this._storeFilter);
 
         // because we accessed directly to the internal data of the store,
         // we have to to re-apply filters to have the store up-to-date.
         store.filter();
-        store.sort();
+        store.resumeEvents(true);
+        store.fireEvent('refresh', store, store.data);
     },
 
     /**
@@ -262,9 +254,9 @@ Ext.define('App.controller.Session', {
     _storeGroupFn: function(record) {
         if (record.get('completed')) {
             return this._groupOrder[3];
-        } else if (record.get(this.self._fields.expired)) {
+        } else if (record.get('_session_expired')) {
             return this._groupOrder[2];
-        } else if (record.get(this.self._fields.postponed)) {
+        } else if (record.get('_session_postponed')) {
             return this._groupOrder[1];
         } else {
             return this._groupOrder[0];
@@ -276,8 +268,8 @@ Ext.define('App.controller.Session', {
      */
     _storeFilterFn: function(record) {
         return (
-            !record.get(this.self._fields.excluded) &&
-            record.get('duration') < this._duration);
+            !record.get('_session_excluded') &&
+             record.get('duration') <= this._duration);
     },
 
     /**
@@ -285,28 +277,24 @@ Ext.define('App.controller.Session', {
      * Reset records state for a new session (done tasks will be excluded).
      */
     _resetRecords: function(store) {
-        var fields = this.self._fields,
-            values = {};
-
-        values[fields.expired] = false;
-        values[fields.postponed] = false;
+        var data;
         store.each(function(record) {
-            values[fields.excluded] = (record.get('completed') != null);
-            record.set(values);
+            data = record.data;
+            data._session_excluded = (data.completed != null);
+            data._session_postponed = false;
+            data._session_expired = false;
         });
     },
 
     /**
      * @private
      */
-    _filterRecords: function(store, duration) {
-        var fields = this.self._fields,
-            expired = false;
-
+    _filterRecords: function(store, seconds) {
+        var expired = false;
         store.each(function(record) {
-            expired = (duration <= 0 || record.get('duration') > duration);
-            if (record.get(fields.expired) != expired) {
-                record.set(fields.expired, expired);
+            expired = (seconds <= 0 || record.get('duration') > seconds);
+            if (record.get('_session_expired') != expired) {
+                record.set('_session_expired', expired);
             }
         });
     },
@@ -346,7 +334,7 @@ Ext.define('App.controller.Session', {
         });
 
         view.setStatistics(statistics);
-        view.setTime(remaining);
+        view.setTime(remaining/60);
         return statistics;
     },
 
@@ -354,28 +342,32 @@ Ext.define('App.controller.Session', {
      * @private
      */
     _onTick: function(timer, elapsed, remaining, duration) {
-        if (!this._store) {
+        var seconds = remaining/1000,
+            store = this._store;
+        if (!store) {
             return;
         }
 
-        this._remaining = remaining/1000; // ms => s convertion
-        this._filterRecords(this._store, this._remaining);
-        this.getSessionView().setTime(this._remaining);
+        this._remaining = seconds;
+        this._filterRecords(store, seconds);
+        this.getSessionView().setTime(seconds/60);
     },
 
     /**
      * @private
      */
     _onTimeout: function(timer, duration) {
-        if (!this._store) {
+        var me = this,
+            store = me._store;
+
+        if (!store) {
             return;
         }
 
-        this._remaining = 0;
-        this._filterRecords(this._store, this._remaining);
-        this.getSessionView().setTime(this._remaining);
+        me._remaining = 0;
+        me._filterRecords(store, 0);
+        me.getSessionView().setTime(0);
 
-        var me = this;
         Ext.Msg.show({
             title: 'Time is up',
             message: 'Start a new JDI session?',
@@ -385,7 +377,7 @@ Ext.define('App.controller.Session', {
                     me._restart();
                 } else {
                     me._suspend();
-                    me.getSessionView().close();
+                    me.getSessionView().hide();
                 }
             }
         });
@@ -400,7 +392,7 @@ Ext.define('App.controller.Session', {
         }
 
         if (!record.get('completed')) {
-            record.set(this.self._fields.postponed, e.direction == 'left');
+            record.set('_session_postponed', e.direction == 'left');
         }
     },
 
@@ -408,7 +400,7 @@ Ext.define('App.controller.Session', {
      * @private
      */
     _onRecordUpdated: function(store) {
-        this._update(store);
+        this._update(this._store);
     },
 
     /**
@@ -470,7 +462,7 @@ Ext.define('App.controller.Session', {
      * Called when the user interacts with the session stopwatch during setup.
      * We will compute candidate tasks and set the session 'startable' state.
      */
-    _onSessionTimeChange: function(time) {
+    _onSessionTimeChange: function(minutes) {
         if (this._isRunning) {
             return;
         }
@@ -479,13 +471,14 @@ Ext.define('App.controller.Session', {
         var statistics = { done: 0, total: 0, active: 0 },
             store = Ext.getStore('tasks'),
             view = this.getSessionView(),
+            seconds = minutes*60
             duration = 0;
 
         store.each(function(record) {
             if (!record.get('completed') && !record.get('deleted')) {
                 duration = record.get('duration');
                 statistics.total++;
-                if (!duration || duration <= time) {
+                if (!duration || duration <= seconds) {
                     statistics.active++;
                 }
             }

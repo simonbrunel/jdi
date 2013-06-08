@@ -40,4 +40,58 @@ Ext.define('App.util.Overrides', {
             return result;
         }
     });
+
+    // PATCH TOUCH 2.2.1 (isPainted is really too slow)
+    // Code from Sencha Touch 2.1.1
+    Ext.dom.Helper.override({
+        insertHtml: function(where, el, html) {
+            var setStart, range, frag, rangeEl, isBeforeBegin, isAfterBegin;
+
+            where = where.toLowerCase();
+
+            if (Ext.isTextNode(el)) {
+                if (where == 'afterbegin' ) {
+                    where = 'beforebegin';
+                } else if (where == 'beforeend') {
+                    where = 'afterend';
+                }
+            }
+
+            isBeforeBegin = where == 'beforebegin';
+            isAfterBegin = where == 'afterbegin';
+
+            range = Ext.feature.has.CreateContextualFragment ? el.ownerDocument.createRange() : undefined;
+            setStart = 'setStart' + (this.endRe.test(where) ? 'After' : 'Before');
+
+            if (isBeforeBegin || where == 'afterend') {
+                if (range) {
+                    range[setStart](el);
+                    frag = range.createContextualFragment(html);
+                } else {
+                    frag = this.createContextualFragment(html);
+                }
+                el.parentNode.insertBefore(frag, isBeforeBegin ? el : el.nextSibling);
+                return el[(isBeforeBegin ? 'previous' : 'next') + 'Sibling'];
+            } else {
+                rangeEl = (isAfterBegin ? 'first' : 'last') + 'Child';
+                if (el.firstChild) {
+                    if (range) {
+                        range[setStart](el[rangeEl]);
+                        frag = range.createContextualFragment(html);
+                    } else {
+                        frag = this.createContextualFragment(html);
+                    }
+
+                    if (isAfterBegin) {
+                        el.insertBefore(frag, el.firstChild);
+                    } else {
+                        el.appendChild(frag);
+                    }
+                } else {
+                    el.innerHTML = html;
+                }
+                return el[rangeEl];
+            }
+        }
+    });
 });

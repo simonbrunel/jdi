@@ -39,7 +39,7 @@
             font-weight: normal;
         }
 
-        .x-button-icon.x-icon-mask {
+        .x-button-icon {
             -webkit-mask-size: 24px;
             -webkit-mask-position: center;
             -webkit-mask-repeat: no-repeat;
@@ -98,7 +98,7 @@
         background: $background;
         color: $foreground;
 
-        .x-button-icon.x-icon-mask {
+        .x-button-icon {
             background: $foreground;
         }
 
@@ -109,7 +109,7 @@
             background: none;
             color: $disabled-color;
 
-            .x-button-icon.x-icon-mask {
+            .x-button-icon {
                 background: $disabled-color;
             }
         }
@@ -140,7 +140,7 @@
             font-size: 0.8em;
         }
 
-        .x-button-icon.x-icon-mask {
+        .x-button-icon {
             background: $foreground;
         }
 

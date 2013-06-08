@@ -37,9 +37,7 @@ Ext.define('App.view.TaskListHeader', {
 
         baseCls: 'x-list-header',
 
-        html: ' ',
-
-        hidden: false
+        html: ' '
     },
 
     _extraCls: [],
@@ -91,26 +89,23 @@ Ext.define('App.view.TaskListItem', {
             cls: Ext.baseCSSPrefix + 'list-item-body',
             layout: { type: 'hbox', align: 'center' },
             items: [
-                {
-                    xtype: 'progressdial',
+                {   xtype: 'progressdial',
                     itemId: 'progress',
                     cls: 'task-duration',
                     maximum: 3600
                 },
-                {   // information
+                {   xtype: 'container',
                     layout: { type: 'vbox', align: 'left' },
                     flex: 1,
                     items: [
-                        {
+                        {   xtype: 'component',
                             itemId: 'task-title',
                             cls: 'task-title',
-                            tpl: '{title}',
                             width: '100%'           //< to enable ellipsis
                         },
-                        {
+                        {   xtype: 'component',
                             itemId: 'task-due',
-                            cls: 'task-due',
-                            tpl: '{due}'
+                            cls: 'task-due'
                         }
                     ]
                 }
@@ -119,15 +114,28 @@ Ext.define('App.view.TaskListItem', {
 
         header: {
             xtype: 'tasklistheader'
-        }
+        },
 
+        data: null
     },
 
     cachedConfig: {
         baseCls: Ext.baseCSSPrefix + 'list-item'
     },
 
+    /**
+     * @private
+     * Internal component references (optimizations).
+     * See *_ensureRefs* for available references.
+     */
+    _refs: null,
+
     _extraCls: [],
+
+    updateBody: function(current) {
+        this._refs = null;
+        this.callParent(arguments);
+    },
 
     updateRecord: function(record) {
         var dataview = this.dataview || this.getDataview(),
@@ -137,17 +145,37 @@ Ext.define('App.view.TaskListItem', {
                 store.indexOf(record),
                 record);
 
-        this._record = record;
-        this._updateBody(data);
-        this.fireEvent('updatedata', this, data);
+        this.setData(data);
+    },
+
+    updateData: function(current, previous) {
+        var changed = true;
+        if (current && previous) {
+            changed = false;
+            Ext.Object.each(current, function(key, value) {
+                if (value !== previous[key]) {
+                    changed = true;
+                    return false;
+                }
+            });
+        }
+
+        if (changed) {
+            this._updateBody(current);
+            this.fireEvent('updatedata', this, current);
+        }
     },
 
     /**
      * @private
      */
     _updateBody: function(data) {
-        var body = this.getBody();
-        if (!body) {
+        var refs = this._ensureRefs(),
+            body = refs? refs.body: null;
+
+        if (!body || body.isDestroying) {
+            // Touch-2.2.1: can be call during component destruction,
+            // so we need to explicitly check if the body still exists.
             return;
         }
 
@@ -160,18 +188,38 @@ Ext.define('App.view.TaskListItem', {
         }
 
         // update body elements
-        body.down('#progress').setValue(data && (data.duration || 0));
-        body.down('#task-title').setData({ title: data && (data.title || '') });
-        body.down('#task-due').setData({
-            due: (data && data.due ?
-                App.util.Date.toTimeAgo(data.due) :
-                'No due date')
-        });
+        refs.progress.setValue(data && (data.duration || 0));
+        refs.title.setHtml(data && (data.title || ''));
+        refs.due.setHtml(data && data.due ?
+            App.util.Date.toTimeAgo(data.due) :
+            'No due date'
+        );
 
         // update body classes
         body.removeCls(_arrayDiff(this._extraCls, extraCls));
         body.addCls(extraCls);
-        this._extraCls = extraCls;
-    }
 
+        this._extraCls = extraCls;
+    },
+
+    /**
+     * @private
+     */
+    _ensureRefs: function() {
+        var refs = this._refs,
+            body = null;
+
+        if (!refs) {
+            body = this.getBody();
+            if (body) {
+                refs = this._refs = {
+                    progress: body.down('#progress'),
+                    title: body.down('#task-title'),
+                    due: body.down('#task-due'),
+                    body: body
+                }
+            }
+        }
+        return refs;
+    }
 });

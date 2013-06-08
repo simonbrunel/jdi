@@ -56,24 +56,6 @@ Ext.application({
         'Task'
     ],
 
-    views: [
-        'AuthPanel',
-        'Discover',
-        'Session',
-        'SplashScreen',
-        'TaskCreate',
-        'TaskDetails',
-        'TaskForm',
-        'TaskList',
-        'TaskListItem',
-        'TaskPanel',
-        'ToolBar',
-        'UserPanel',
-        'WelcomeScreen',
-        'phone.Main',
-        'tablet.Main'
-    ],
-
     stores: [
         'Tasks'
     ],
